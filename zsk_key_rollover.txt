@@ -1,0 +1,39 @@
+
+DNSSEC ZSK Key Rollover for Inline Signed Zones
+
+## change to dnssec key directory
+
+cd <your dnssec key directory>
+
+===============================================================================================================================
+## use dnssec-settime to set inactive time (now + 10 minutes) and deletion time (now + 15 minutes) on current ZSK
+## dnssec-settime: warning: Permissions on the file <current ZSK> have changed from 0664 to 0600 as a result of this operation.
+
+dnssec-settime -I +10mi -D +15mi <current zsk>
+
+## change group owner back to bind user for all dnssec keys in directory
+
+chgrp bind K*
+
+## add read/write permissions to bind for all dnssec keys in directory
+
+chmod g+rw K*
+
+==================================================================
+## generate new dnssec successor key based on metadata (inactive time) of current dnssec key and set prepublication interval of 5 minutes before activation time
+
+dnssec-keygen -S <current zsk> -i 5mi
+
+## change group owner back to bind user for all dnssec keys
+
+chgrp bind K*
+
+## add read/write permissions to bind for all dnssec keys
+
+chmod g+rw K*
+
+## (re)load all dnssec keys for specific zone
+
+rndc loadkeys <zone>
+
+###### done
