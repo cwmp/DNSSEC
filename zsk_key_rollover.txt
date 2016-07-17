@@ -20,7 +20,7 @@ chgrp bind K*
 chmod g+rw K*
 
 ==================================================================
-## generate new dnssec successor key based on metadata (inactive time) of current dnssec key and set prepublication interval of 5 minutes before activation time
+## generate new dnssec successor key with activation time equals inactivation time of current dnssec key and set prepublication interval of 5 minutes before activation time
 
 dnssec-keygen -S <current zsk> -i 5mi
 
